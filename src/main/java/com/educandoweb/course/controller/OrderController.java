@@ -9,26 +9,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.educandoweb.course.entities.User;
-import com.educandoweb.course.service.UserService;
-
+import com.educandoweb.course.entities.Order;
+import com.educandoweb.course.service.OrderService;
 
 @RestController
-@RequestMapping(value = "/users")
-public class UserController {
+@RequestMapping("/orders")
+public class OrderController {
 
-	
 	@Autowired
-	private UserService userService;
+	private OrderService orderService;
 	
 	@GetMapping
-	public ResponseEntity<List<User>> findAll(){
-		return ResponseEntity.ok().body(userService.findAll());
+	public ResponseEntity<List<Order>>findAll(){
+		return ResponseEntity.ok().body(orderService.findAll());
 	}
 	
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<User> findById(@PathVariable Long id){
-		return ResponseEntity.ok().body(userService.findById(id));
+	@GetMapping("/{id}")
+	public ResponseEntity<Order> findById(@PathVariable Long id){
+		return ResponseEntity.ok().body(orderService.findById(id));
 	}
-	
 }
