@@ -5,9 +5,12 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
+import com.educandoweb.course.controller.exceptions.ControllerExceptionHandler;
 import com.educandoweb.course.entities.User;
 import com.educandoweb.course.repository.UserRepository;
+import com.educandoweb.course.service.exceptions.ControllerNotFoundException;
 
 @Service
 public class UserService {
@@ -21,8 +24,7 @@ public class UserService {
 	
 	public User findById(Long id) {
 		Optional<User> obj = userRepository.findById(id);
-		return obj.get();
-	}
+		return obj.orElseThrow(() -> new ControllerNotFoundException(id));	}
 	
 	public User insert(User user) {
 		return userRepository.save(user);
