@@ -13,6 +13,8 @@ import com.educandoweb.course.repository.UserRepository;
 import com.educandoweb.course.service.exceptions.ControllerNotFoundException;
 import com.educandoweb.course.service.exceptions.DatabaseException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class UserService {
 
@@ -45,9 +47,13 @@ public class UserService {
 	}
 	
 	public User update(Long id, User user) {
+		try {
 		User u = userRepository.getReferenceById(id);
 		updateData(u, user);
 		return user = userRepository.save(u);
+		}catch(EntityNotFoundException e) {
+			throw new ControllerNotFoundException(id);
+		}
 	}
 
 	private void updateData(User u, User user) {
