@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
 
-import com.educandoweb.course.controller.exceptions.ControllerExceptionHandler;
 import com.educandoweb.course.entities.User;
 import com.educandoweb.course.repository.UserRepository;
 import com.educandoweb.course.service.exceptions.ControllerNotFoundException;
+import com.educandoweb.course.service.exceptions.DatabaseException;
 
 @Service
 public class UserService {
@@ -31,7 +32,16 @@ public class UserService {
 	}
 	
 	public void delete(Long id) {
-		userRepository.deleteById(id);
+		try {
+			userRepository.deleteById(id);
+		}
+		catch(EmptyResultDataAccessException e) {
+			throw new ControllerNotFoundException(id);
+		}
+		catch(DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+		
 	}
 	
 	public User update(Long id, User user) {
